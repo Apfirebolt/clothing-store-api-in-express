@@ -13,6 +13,7 @@ import { notFound, errorHandler } from "./middleware/error-handler.js";
 
 // import routes
 import authRoutes from "./routes/auth.js";
+import clothRoutes from "./routes/cloth.js";
 
 dotenv.config();
 
@@ -54,7 +55,6 @@ opts.algorithms = [process.env.JWT_ALGORITHM];
 
 passport.use(
   new JwtStrategy(opts, (jwt_payload, done) => {
-    console.log("Inside JWT strategy passport ");
     User.findOne({ _id: jwt_payload.sub })
       .then((data) => {
         if (data === null) {
@@ -73,9 +73,12 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/cloth", clothRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Success" });
+  res.json({
+    'message': 'API is working'
+  })
 });
 
 app.use(notFound);
